@@ -13,7 +13,6 @@ interface IOption {
     port: number
 }
 
-
 class Node {
     id: string
     #peers: Map<string, net.Socket>
@@ -173,6 +172,8 @@ class Node {
     }
 }
 
+
+export default Node
 
 
 
