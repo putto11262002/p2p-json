@@ -30,13 +30,12 @@ class Node {
         this.#options = options
         this.#emitter = new EventEmitter()
         this.on =  this.#emitter.on.bind(this.#emitter)
-        this.#server = net.createServer((socket) => this.onNewConnection(socket))
+        this.#server = net.createServer((socket) => this.#onNewConnection(socket))
         this.listeners()
     }
 
-
     listeners(){
-        this.#server.on("listening", this.onStart)
+        this.#server.on("listening", this.#onStart)
 
         this.#emitter.on("connect", ({nodeId, socket}) => {
             console.log(`connect with ${nodeId}`)
@@ -116,7 +115,7 @@ class Node {
         this.#server.listen(this.#options.port)
     }
 
-    onNewConnection(socket: net.Socket){
+    #onNewConnection(socket: net.Socket){
         let nodeId: string | undefined = undefined;
         socket.write(JSON.stringify({type: PacketType.handshake, from: this.id}))
 
@@ -125,7 +124,7 @@ class Node {
             let parsedPacket: any
             
             try{
-                parsedPacket = this.parsePacket(rawPacket)
+                parsedPacket = this.#parsePacket(rawPacket)
             }catch(err){
                 socket.destroy()
                 return 
@@ -157,7 +156,7 @@ class Node {
         })
     }
 
-    parsePacket(rawPacket: Buffer){
+    #parsePacket(rawPacket: Buffer){
         let parsedPacket = JSON.parse(rawPacket.toString())
         return parsedPacket
     }
@@ -165,11 +164,11 @@ class Node {
     connect(ip: string, port: number){
                 const socket = new net.Socket();
                 socket.connect(port, ip, () => {
-                  this.onNewConnection(socket);
+                  this.#onNewConnection(socket);
                 });
               };
 
-    onStart(){
+    #onStart(){
         console.log("Server started")
     }
 }
