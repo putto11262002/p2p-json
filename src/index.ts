@@ -1,5 +1,4 @@
 
-
 import net from "net"
 import EventEmitter from "events"
 import {v4 as uuidv4} from "uuid"
@@ -14,13 +13,6 @@ interface IOption {
     port: number
 }
 
-interface IPacket {
-    type: PacketType;
-    packetId: string;
-    from: string;
-    to?: string;
-    data: object
-}
 
 class Node {
     id: string
@@ -181,19 +173,6 @@ class Node {
         console.log("Server started")
     }
 }
-
-const node = new Node({port: 3333})
-node.start()
-
-node.connect("localhost", 3000)
-node.on("broadcast", ({from, data}) => {
-    console.log(from, data)
-})
-
-process.stdin.on('data', (data) => {
-    node.broadcast(JSON.parse(data.toString()));
-  });
-
 
 
 
