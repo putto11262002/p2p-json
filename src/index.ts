@@ -113,7 +113,7 @@ class Node {
 
         setTimeout(() => {
             this.#seenPackets.delete(packetId)
-        })
+        }, 1000 * 60)
 
         this.#peers.forEach((socket, nodeId) => {
             socket.write(packet)
@@ -182,8 +182,10 @@ class Node {
     }
 }
 
-const node = new Node({port: 3000})
+const node = new Node({port: 3333})
 node.start()
+
+node.connect("localhost", 3000)
 node.on("broadcast", ({from, data}) => {
     console.log(from, data)
 })
