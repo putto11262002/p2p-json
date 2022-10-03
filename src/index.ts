@@ -34,7 +34,7 @@ class Node {
     }
 
     listeners(){
-        this.#server.on("listening", this.#onStart)
+        this.#server.on("listening", () => this.#emitter.emit("listening"))
 
         this.#emitter.on("connect", ({nodeId, socket}) => {
             console.log(`connect with ${nodeId}`)
@@ -114,6 +114,13 @@ class Node {
         this.#server.listen(this.#options.port)
     }
 
+    close(cb: (err? : Error | undefined) => void){
+        for (let socket of this.#peers.values()){
+            socket.destroy()
+        }
+        this.#server.close(cb)
+    }
+
     #onNewConnection(socket: net.Socket){
         let nodeId: string | undefined = undefined;
         socket.write(JSON.stringify({type: PacketType.handshake, from: this.id}))
@@ -166,10 +173,6 @@ class Node {
                   this.#onNewConnection(socket);
                 });
               };
-
-    #onStart(){
-        console.log("Server started")
-    }
 }
 
 
