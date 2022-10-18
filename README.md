@@ -1,5 +1,5 @@
 # p2p-json
-Simple to use library the allows you to create layer-4 p2p network which supports json format.
+Simple to use library the allows you to create layer-4 p2p network which supports json data transmission.
 
 ## Usages
 ```
